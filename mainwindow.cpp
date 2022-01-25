@@ -25,12 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->figure->yAxis->setLabel("amplitude");
     ui->figure->xAxis->setRange(-M_PI, M_PI);
 
-    x.resize(200);
-    for(size_t i{}; i<x.size(); i++){
-        x[i] = (i/100.0-1)* M_PI;
-    }
-    y.resize(200);
-    p.resize(200);
+
+    ui->doubleSpinBox_xl->setValue(-M_PI);
+    ui->doubleSpinBox_xh->setValue(+M_PI);
+    ui->spinBox_pints->setValue(200);
+
+
 
     connect(timer, &QTimer::timeout, this, &MainWindow::newPlot);
     c=0;
@@ -65,7 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
-    timer->start(10);
 }
 
 
@@ -151,6 +150,25 @@ void MainWindow::on_lineEdit_t_textEdited(const QString &arg1)
 
 void MainWindow::on_pushButton_plot_clicked()
 {
+    x.resize(ui->spinBox_pints->value());
+
+    double xl = ui->doubleSpinBox_xl->value();
+    double xh = ui->doubleSpinBox_xh->value();
+    if(xh <= xl){
+        return;
+    }
+    for(size_t i{}; i<x.size(); i++){
+        x[i] = (xh-xl) * i/static_cast<double>(ui->spinBox_pints->value()) + xl;
+    }
+    y.resize(ui->spinBox_pints->value());
+    p.resize(ui->spinBox_pints->value());
+
+
+    this->ui->figure->yAxis->setRange(0, 0.1);
+    this->ui->figure_2->yAxis->setRange(0, 0.1);
+    ui->figure->xAxis->setRange(xl, xh);
+    ui->figure_2->xAxis->setRange(xl, xh);
+
     waveNumber.clear();
     QStringList ks = ui->lineEdit_kArray->text().split(",");
 
@@ -161,7 +179,13 @@ void MainWindow::on_pushButton_plot_clicked()
             waveNumber.push_back(tmp);
         }
     }
-
+    ui->spinBox_N->setValue(waveNumber.size());
+    if(waveNumber.size() == 0){
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","All input values for K are invalid(not a number)");
+        messageBox.setFixedSize(500,200);
+        return;
+    }
     newPlot();
 
 }
