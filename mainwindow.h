@@ -34,6 +34,8 @@ private slots:
 
     void on_lineEdit_kArray_textEdited(const QString &arg1);
 
+    void on_pushButton_emass_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;

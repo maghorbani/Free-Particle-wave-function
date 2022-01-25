@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->spinBox_pints->setValue(200);
 
 
-
+    ui->lineEdit_mass->setText(QString::number(mathQM::electroneMass));
     connect(timer, &QTimer::timeout, this, &MainWindow::newPlot);
     c=0;
     max_it=1000;
@@ -85,6 +85,15 @@ void MainWindow::calcData( QVector<double> &waveNumber, double t)
     QVector<double> frequency;
 
     for( const double &k: waveNumber){
+        bool ok = false;
+        double mass = ui->lineEdit_mass->text().toDouble(&ok);
+        if(!ok){
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error","the mass is invalid(not a number)");
+            messageBox.setFixedSize(500,200);
+            emit on_pushButton_pause_clicked();
+            return;
+        }
         double omega {std::pow(k,2) * mathQM::hbar / (2*mathQM::electroneMass)};
         frequency.push_back(omega);
     }
@@ -155,6 +164,10 @@ void MainWindow::on_pushButton_plot_clicked()
     double xl = ui->doubleSpinBox_xl->value();
     double xh = ui->doubleSpinBox_xh->value();
     if(xh <= xl){
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","heigher x should be greater than the lower x");
+        messageBox.setFixedSize(500,200);
+        emit on_pushButton_pause_clicked();
         return;
     }
     for(size_t i{}; i<x.size(); i++){
@@ -184,6 +197,7 @@ void MainWindow::on_pushButton_plot_clicked()
         QMessageBox messageBox;
         messageBox.critical(0,"Error","All input values for K are invalid(not a number)");
         messageBox.setFixedSize(500,200);
+        emit on_pushButton_pause_clicked();
         return;
     }
     newPlot();
@@ -193,4 +207,9 @@ void MainWindow::on_pushButton_plot_clicked()
 void MainWindow::on_lineEdit_kArray_textEdited(const QString &arg1)
 {
     ui->spinBox_N->setValue(arg1.split(",").size());
+}
+
+void MainWindow::on_pushButton_emass_clicked()
+{
+    ui->lineEdit_mass->setText(QString::number(mathQM::electroneMass));
 }
