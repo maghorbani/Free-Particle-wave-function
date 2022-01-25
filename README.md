@@ -2,6 +2,8 @@
 
 This is a cross platform software that visualizes the **Amplitude**(the square root of **PDF**) and  **Phase** of a superposition wave function for a free particle in 1 dimension <code>x</code> 
 
+This work is done as a bonus project for the Quantum Electronics Course of *[KN Toosi University of Technology](https://en.kntu.ac.ir), Tehran, Iran*, presented by [Dr. Ebrahim Nadimi](https://wp.kntu.ac.ir/nadimi/) (Special Thanks to Dr Nadimi for the excellent lectures that caused a solid understanding on Quantum Physics in me, and the guidance to do this projects)
+
 #### General Description
 
 The Schrodinger Equation is:
@@ -57,4 +59,22 @@ Im(\Psi) = \frac{\Psi-\Psi^*}{2i}, Re(\Psi) = \frac{\Psi+\Psi^*}{2} \\
 $$
 
 
- 
+#### Software Description
+
+![a preview of the software](shot.png)
+
+This numerical calculations are done using pure C++ and the STL (cmath)
+
+The graphical application is wrote using Qt5 and to visualize and plot the results, QCustomPlot is used
+
+#### inputs
+
+​	**K array** comma separated
+
+​	**x range** the calculation range
+
+​	**number of points in x range**
+
+​	**time variation speed**
+
+​	**The particle mass** and a push button to set the default electron mass
