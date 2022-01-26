@@ -79,6 +79,8 @@ The graphical application is wrote using Qt5 and to visualize and plot the resul
 
 ​	**The particle mass** and a push button to set the default electron mass
 
+​	**result type** you can choose which one to plot: sqrt(PDF), PDF, PDF with complex implementation (similar to real implementation)
+
 
 
 
@@ -86,3 +88,21 @@ The graphical application is wrote using Qt5 and to visualize and plot the resul
 #### Supsupplementary Description
 
 To cover a possibility of wrong mathematical calculations for series and wrong programming algorithms, programming implementation with complex numbers has been done and the results was similar to the implementation with the series of `cosines`.  
+
+
+
+#### some tests
+
+As  you can see in the tests below, increasing number of harmonics, will increase the period value.
+
+and from the last image (more resolution in x) we can see that the derivative of PDF is continuous 
+
+![a preview of the software](res_1.png)
+
+![a preview of the software](res_2.png)
+
+![a preview of the software](res_3.png)
+
+![a preview of the software](res_4.png)
+
+![a preview of the software](res_5.png)
