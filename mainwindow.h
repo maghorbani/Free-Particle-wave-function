@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include <tuple>
+#include <complex>
 #include <QTimer>
 namespace Ui {
 class MainWindow;
@@ -36,6 +37,12 @@ private slots:
 
     void on_pushButton_emass_clicked();
 
+    void on_checkBox_sqrt_toggled(bool checked);
+
+    void on_checkBox_comp_toggled(bool checked);
+
+    void on_checkBox_pdf_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer;
@@ -47,7 +54,8 @@ private:
     bool start = false;
 
     QVector<double> x;
-    QVector<double> y;
+    QVector<double> y, y_2,y_3, y_0;
+    QVector<std::complex<double>> y_comp;
     QVector<double> p;
 
     QVector<double> waveNumber;

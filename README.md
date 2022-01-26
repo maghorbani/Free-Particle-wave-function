@@ -10,7 +10,7 @@ The Schrodinger Equation is:
 $$
 i\hbar \frac{\partial}{\partial t} \Psi(x,t) = \left[ -\frac{\hbar^2}{2m}\Delta + V(x,t) \right] \Psi(x,t)
 $$
-in a *1D* case, any linear composition complex exponentials can be a solution to the SE:
+in a *1D* case, any linear composition of complex exponentials can be a solution to the SE:
 $$
 \Psi(x,t) = \sum_{n=1}^{N} A_n \exp i(k_nx-\omega_nt)
 $$
@@ -47,7 +47,7 @@ $$
 $$
 The other `N(N-1)` terms are splittable in two groups in which each term in a group is corresponded to exactly one term in the other group, so that the corresponded terms are complex conjugate of each other (As we know for any `(n,m)` term, there is a `(m,n)` term):
 $$
-\Psi \times \Psi^* = 1+\frac{2}{N}\sum_{n=1}^N \sum_{m=n+1}^N \cos \left[ (k_n-k_m)x-(\omega_n-\omega_m)t \right]
+P(x,t) = \Psi \times \Psi^* = 1+\frac{2}{N}\sum_{n=1}^N \sum_{m=n+1}^N \cos \left[ (k_n-k_m)x-(\omega_n-\omega_m)t \right]
 $$
 And the **Born's rule** will be satisfied, while the integral of a `cosine` on a period is `0` 
 
@@ -78,3 +78,11 @@ The graphical application is wrote using Qt5 and to visualize and plot the resul
 ​	**time variation speed**
 
 ​	**The particle mass** and a push button to set the default electron mass
+
+
+
+
+
+#### Supsupplementary Description
+
+To cover a possibility of wrong mathematical calculations for series and wrong programming algorithms, programming implementation with complex numbers has been done and the results was similar to the implementation with the series of `cosines`.  

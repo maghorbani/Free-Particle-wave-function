@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QVector>
 #include <cmath>
-
+#include <complex>
 #include <QTimer>
 #include <QString>
 #include "consts.h"
@@ -21,8 +21,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->figure_2->xAxis->setRange(-M_PI, M_PI);
 
     ui->figure->addGraph();
+    ui->figure->graph(0)->setPen(QPen(Qt::blue));
+    ui->figure->graph(0)->setName("real implementation");
+    ui->figure->addGraph();
+    ui->figure->graph(1)->setPen(QPen(Qt::red));
+    ui->figure->graph(1)->setName("complex implementation");
+    ui->figure->addGraph();
+    ui->figure->graph(2)->setPen(QPen(Qt::green));
+    ui->figure->graph(2)->setName("square root of PDF");
+    ui->figure->legend->setVisible(true);
     ui->figure->xAxis->setLabel("x");
-    ui->figure->yAxis->setLabel("amplitude");
+    ui->figure->yAxis->setLabel("PDF");
     ui->figure->xAxis->setRange(-M_PI, M_PI);
 
 
@@ -47,8 +56,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
         double max_p = * std::max_element(std::begin(this->p), std::end(this->p));
         double min_p = * std::min_element(std::begin(this->p), std::end(this->p));
-
-        this->ui->figure->graph(0)->setData(this->x,this->y);
+        if(ui->checkBox_pdf->isChecked())
+            this->ui->figure->graph(0)->setData(this->x,this->y);
+        else
+            this->ui->figure->graph(0)->setData(this->x,this->y_0);
+        if(ui->checkBox_sqrt->isChecked())
+            this->ui->figure->graph(2)->setData(this->x, this->y_3);
+        else
+            this->ui->figure->graph(2)->setData(this->x,this->y_0);
+        if(ui->checkBox_comp->isChecked())
+            this->ui->figure->graph(1)->setData(this->x, this->y_2);
+        else
+            this->ui->figure->graph(1)->setData(this->x,this->y_0);
 
         this->ui->figure_2->graph(0)->setData(this->x,this->p);
 
@@ -101,6 +120,9 @@ void MainWindow::calcData( QVector<double> &waveNumber, double t)
 
     for(size_t i{}; i<x.size(); i++){
         y[i] = 0;
+        y_2[i] = 0;
+        y_3[i] = 0;
+        y_comp[i] = std::complex<double>(0,0);
         p[i] = 0;
 
         double sines{}, cosines{};
@@ -109,6 +131,9 @@ void MainWindow::calcData( QVector<double> &waveNumber, double t)
             for(size_t m{n+1}; m<N; m++){
                 y[i] += std::cos((waveNumber[n] - waveNumber[m]) * x[i]  - (frequency[n]-frequency[m]) *t);
             }
+            for(size_t m{}; m<N; m++){
+                y_comp[i] += std::exp(std::complex<double>(0, (waveNumber[n]-waveNumber[m])*x[i] - (frequency[n]-frequency[m]*t)));
+            }
 
             sines += std::sin(waveNumber[n]*x[i] - frequency[n]*t);
             cosines += std::cos(waveNumber[n]*x[i] - frequency[n]*t);
@@ -116,7 +141,10 @@ void MainWindow::calcData( QVector<double> &waveNumber, double t)
 
         p[i] = std::atan(sines/cosines);
 
-        y[i] = std::sqrt((2.0/static_cast<double>(N)) * y[i] + 1);
+        y[i] = (2.0/static_cast<double>(N)) * y[i] + 1;
+        y_3[i] = std::sqrt(y[i]);
+//        y_comp[i] = y_comp[i]/(1.0*N);
+        y_2[i] = y_comp[i].real()/(1.0*N);
 
     }
 }
@@ -174,6 +202,10 @@ void MainWindow::on_pushButton_plot_clicked()
         x[i] = (xh-xl) * i/static_cast<double>(ui->spinBox_pints->value()) + xl;
     }
     y.resize(ui->spinBox_pints->value());
+    y_comp.resize(ui->spinBox_pints->value());
+    y_2.resize(ui->spinBox_pints->value());
+    y_3.resize(ui->spinBox_pints->value());
+    y_0.resize(ui->spinBox_pints->value());
     p.resize(ui->spinBox_pints->value());
 
 
@@ -212,4 +244,19 @@ void MainWindow::on_lineEdit_kArray_textEdited(const QString &arg1)
 void MainWindow::on_pushButton_emass_clicked()
 {
     ui->lineEdit_mass->setText(QString::number(mathQM::electroneMass));
+}
+
+void MainWindow::on_checkBox_sqrt_toggled(bool checked)
+{
+    emit dataChange();
+}
+
+void MainWindow::on_checkBox_comp_toggled(bool checked)
+{
+emit dataChange();
+}
+
+void MainWindow::on_checkBox_pdf_toggled(bool checked)
+{
+emit dataChange();
 }
