@@ -28,8 +28,6 @@ The **Born's rule** helps us to find the coefficients; considering that the comp
 
 <img src="https://latex.codecogs.com/svg.image?\sum_{n}&space;|A_n|^2&space;=&space;1" title="\sum_{n} |A_n|^2 = 1" />
 
-as another consequence of **Born's rule** in this solution, the solution is valid in one period, so the wave function will be integrable and integration of **PDF** on one period, gives `1`
-
 we can choose the coefficients so that the state would be equally weighted:
 
 <img src="https://latex.codecogs.com/svg.image?A_n&space;=&space;\frac{1}{\sqrt{N}}" title="A_n = \frac{1}{\sqrt{N}}" />
